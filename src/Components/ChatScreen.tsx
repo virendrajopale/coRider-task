@@ -25,13 +25,13 @@ const ChatScreen: React.FC = () => {
   const fetchMessages = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`https://qa.corider.in/assignment/chat?page=${page*10}`);
+      const response = await axios.get(`https://qa.corider.in/assignment/chat?page=${page+10}`);
       if (response.data && response.data.chats && Array.isArray(response.data.chats)) {
         if (initialLoad) {
           setMessages(response.data.chats);
           setInitialLoad(false);
         } else {
-          setMessages((prevMessages) => [...prevMessages, ...response.data.chats.reverse()]);
+          setMessages((prevMessages) => [...prevMessages,...response.data.chats.reverse()]);
         }
       } else {
         console.error('Expected an array of messages but got:', response.data);
@@ -80,14 +80,17 @@ const ChatScreen: React.FC = () => {
       }
     };
   }, [messages]);
+  useEffect(()=>{
+    fetchMessages()
+  },[page])
   const handleScroll = scrollThrottle(() => {
     const chatContainer = chatContainerRef.current;
     if (chatContainer) {
       // console.log(chatContainer.scrollTop)
       if ((chatContainer.scrollTop ) <= 50 && !loading) {
 
-        // setPage((prevPage) => prevPage + 1);
-        fetchMessages()
+        setPage((prevPage) => prevPage + 1);
+        // fetchMessages()
         // chatContainer.scrollTop =100;
       }
     }

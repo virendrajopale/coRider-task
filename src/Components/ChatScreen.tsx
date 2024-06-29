@@ -25,7 +25,7 @@ const ChatScreen: React.FC = () => {
   const fetchMessages = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`https://qa.corider.in/assignment/chat?page=${page+10}`);
+      const response = await axios.get(`https://qa.corider.in/assignment/chat?page=${page+1}`);
       if (response.data && response.data.chats && Array.isArray(response.data.chats)) {
         if (initialLoad) {
           setMessages(response.data.chats);

@@ -63,10 +63,10 @@ const ChatScreen: React.FC = () => {
   };
  
   useEffect(()=>{
-    console.log("third")
+
     fetchMessages()
     const chatContainer = chatContainerRef.current;
-      console.log("secind")
+
       if (chatContainer) {
         // console.log(chatContainer.scrollTop)
          chatContainer.addEventListener('scroll', handleScroll);
@@ -85,7 +85,7 @@ const ChatScreen: React.FC = () => {
     const chatContainer = chatContainerRef.current;
     if (chatContainer) {
       console.log(chatContainer.scrollTop)
-      if ((chatContainer.scrollTop ) < 450  ) {
+      if ((chatContainer.scrollTop ) < 500  ) {
         
         setPage((prevPage) => prevPage + 1);
         // fetchMessages()

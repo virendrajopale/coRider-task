@@ -14,7 +14,7 @@ const MessageSentBox: React.FC = () => {
   
 
   return (
-    <div className="p-4 pb-12">
+    <div className="p-4 pb-4">
       <div className="relative flex items-center">
         <input
           type="text"

@@ -84,7 +84,7 @@ const ChatScreen: React.FC = () => {
   const handleScroll = scrollThrottle(() => {
     const chatContainer = chatContainerRef.current;
     if (chatContainer) {
-      console.log(chatContainer.scrollTop)
+
       if ((chatContainer.scrollTop ) < 500  ) {
         
         setPage((prevPage) => prevPage + 1);

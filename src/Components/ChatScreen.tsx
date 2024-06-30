@@ -66,7 +66,10 @@ const ChatScreen: React.FC = () => {
 
     fetchMessages()
     const chatContainer = chatContainerRef.current;
-
+    if (initialLoad && chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+    }
       if (chatContainer) {
         // console.log(chatContainer.scrollTop)
          chatContainer.addEventListener('scroll', handleScroll);
@@ -85,17 +88,17 @@ const ChatScreen: React.FC = () => {
     const chatContainer = chatContainerRef.current;
     if (chatContainer) {
 
-      if ((chatContainer.scrollTop ) < 500  ) {
+      if (chatContainer.scrollTop  <= 500  ) {
         
         setPage((prevPage) => prevPage + 1);
         // fetchMessages()
         // chatContainer.scrollTop =100;
       }
     }
-  },200);
+  },100);
 
   return (
-    <div ref={chatContainerRef} className="h-[80%] overflow-y-auto no-scrollbar" >
+    <div ref={chatContainerRef} className="h-[80%] overflow-y-auto no-scrollbar " >
       <div className="flex flex-col-reverse">
       {loading && <p>Loading...</p>}
         {messages.length > 0 && messages?.map((message) => (

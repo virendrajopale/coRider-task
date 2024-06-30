@@ -29,6 +29,11 @@ const ChatScreen: React.FC = () => {
       if (response.data && response.data.chats && Array.isArray(response.data.chats)) {
         if (initialLoad) {
           setMessages(response.data.chats);
+          const chatContainer = chatContainerRef.current;
+          if (initialLoad && chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+              }
           setInitialLoad(false);
         } else {
           setMessages((prevMessages) => [...prevMessages,...response.data.chats.reverse()]);
@@ -43,14 +48,7 @@ const ChatScreen: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchMessages();
-    const chatContainer = chatContainerRef.current;
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-    }
-  }, []);
+
   const scrollThrottle = <T extends (...args: any[]) => any>(callback: T, delay: number) => {
     let timeout: NodeJS.Timeout | null = null;
   
@@ -63,38 +61,38 @@ const ChatScreen: React.FC = () => {
       }
     };
   };
-  useEffect(() => {
-    const chatContainer = chatContainerRef.current;
-    console.log()
-    if (chatContainer) {
-      // console.log(chatContainer.scrollTop)
-       chatContainer.addEventListener('scroll', handleScroll);
-      //  console.log(chatContainer.scrollHeight)
-      chatContainer.scrollTop =900 ;
-      // chatContainer.scrollTop = 80;
-    }
-
-    return () => {
-      if (chatContainer) {
-        chatContainer.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [messages]);
+ 
   useEffect(()=>{
+    console.log("third")
     fetchMessages()
+    const chatContainer = chatContainerRef.current;
+      console.log("secind")
+      if (chatContainer) {
+        // console.log(chatContainer.scrollTop)
+         chatContainer.addEventListener('scroll', handleScroll);
+        //  console.log(chatContainer.scrollHeight)
+        // chatContainer.scrollTop =900 ;
+        // chatContainer.scrollTop = 80;
+      }
+  
+      return () => {
+        if (chatContainer) {
+          chatContainer.removeEventListener('scroll', handleScroll);
+        }
+      };
   },[page])
   const handleScroll = scrollThrottle(() => {
     const chatContainer = chatContainerRef.current;
     if (chatContainer) {
-      // console.log(chatContainer.scrollTop)
-      if ((chatContainer.scrollTop ) <= 50 && !loading) {
-
+      console.log(chatContainer.scrollTop)
+      if ((chatContainer.scrollTop ) < 450  ) {
+        
         setPage((prevPage) => prevPage + 1);
         // fetchMessages()
         // chatContainer.scrollTop =100;
       }
     }
-  },600);
+  },200);
 
   return (
     <div ref={chatContainerRef} className="h-[80%] overflow-y-auto no-scrollbar" >

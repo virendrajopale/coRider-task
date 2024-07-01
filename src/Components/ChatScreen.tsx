@@ -25,12 +25,18 @@ const ChatScreen: React.FC = () => {
 
   const fetchMessages = async () => {
     setLoading(true);
+    
     try {
       const response = await axios.get(`https://qa.corider.in/assignment/chat?page=${page}`);
       if (response.data && response.data.chats && Array.isArray(response.data.chats)) {
         if (initialLoad) {
           setMessages(response.data.chats);
-         
+          setTimeout(() => {
+            if (chatContainerRef.current) {
+              chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+              console.log("Initial load scrollTop:", chatContainerRef.current.scrollTop);
+            }
+          }, 0);
          
           setInitialLoad(false);
         } else {
@@ -44,16 +50,10 @@ const ChatScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-    console.log("hii3")
-    const chatContainer = chatContainerRef.current;
-    console.log(chatContainer?.scrollHeight)
-    if (firstLoad  && chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-    }
-    setFirstLoad(true)
+   
+  
   };
-
+//  console.log(chatContainer.scrollHeight)
 
   const scrollThrottle = <T extends (...args: any[]) => any>(callback: T, delay: number) => {
     let timeout: NodeJS.Timeout | null = null;
@@ -74,25 +74,25 @@ const ChatScreen: React.FC = () => {
     const chatContainer = chatContainerRef.current;
     
       if (chatContainer) {
-        // console.log(chatContainer.scrollTop)
+        console.log(chatContainer.scrollTop)
+        console.log(chatContainer.scrollHeight)
          chatContainer.addEventListener('scroll', handleScroll);
-         console.log(chatContainer.scrollHeight)
         
         // chatContainer.scrollTop =900 ;
         // chatContainer.scrollTop = 80;
       }
-      console.log("hii")
+    
       return () => {
         if (chatContainer) {
           chatContainer.removeEventListener('scroll', handleScroll);
         }
       };
-      console.log('hii1')
+      
   },[page])
 
   const handleScroll = scrollThrottle(() => {
     const chatContainer = chatContainerRef.current;
-    console.log("hii")
+
     if (chatContainer) {
 
       if (chatContainer.scrollTop  <= 500  ) {
@@ -105,7 +105,7 @@ const ChatScreen: React.FC = () => {
   },100);
 
   return (
-    <div ref={chatContainerRef} className="h-[80%] overflow-y-auto  " >
+    <div ref={chatContainerRef} className="h-[80%] overflow-y-auto no-scrollbar " >
       <div className="flex flex-col-reverse">
       {loading && <p>Loading...</p>}
         {messages.length > 0 && messages?.map((message) => (

@@ -19,6 +19,7 @@ const ChatScreen: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -29,11 +30,8 @@ const ChatScreen: React.FC = () => {
       if (response.data && response.data.chats && Array.isArray(response.data.chats)) {
         if (initialLoad) {
           setMessages(response.data.chats);
-          const chatContainer = chatContainerRef.current;
-          if (initialLoad && chatContainer) {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-                
-              }
+         
+         
           setInitialLoad(false);
         } else {
           setMessages((prevMessages) => [...prevMessages,...response.data.chats.reverse()]);
@@ -46,6 +44,14 @@ const ChatScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
+    console.log("hii3")
+    const chatContainer = chatContainerRef.current;
+    console.log(chatContainer?.scrollHeight)
+    if (firstLoad  && chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+    }
+    setFirstLoad(true)
   };
 
 
@@ -66,26 +72,27 @@ const ChatScreen: React.FC = () => {
 
     fetchMessages()
     const chatContainer = chatContainerRef.current;
-    if (initialLoad && chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-    }
+    
       if (chatContainer) {
         // console.log(chatContainer.scrollTop)
          chatContainer.addEventListener('scroll', handleScroll);
-        //  console.log(chatContainer.scrollHeight)
+         console.log(chatContainer.scrollHeight)
+        
         // chatContainer.scrollTop =900 ;
         // chatContainer.scrollTop = 80;
       }
-  
+      console.log("hii")
       return () => {
         if (chatContainer) {
           chatContainer.removeEventListener('scroll', handleScroll);
         }
       };
+      console.log('hii1')
   },[page])
+
   const handleScroll = scrollThrottle(() => {
     const chatContainer = chatContainerRef.current;
+    console.log("hii")
     if (chatContainer) {
 
       if (chatContainer.scrollTop  <= 500  ) {
@@ -98,7 +105,7 @@ const ChatScreen: React.FC = () => {
   },100);
 
   return (
-    <div ref={chatContainerRef} className="h-[80%] overflow-y-auto no-scrollbar " >
+    <div ref={chatContainerRef} className="h-[80%] overflow-y-auto  " >
       <div className="flex flex-col-reverse">
       {loading && <p>Loading...</p>}
         {messages.length > 0 && messages?.map((message) => (
